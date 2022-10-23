@@ -1,5 +1,6 @@
 ﻿import Login from "../screens/Login";
 import Home from "../screens/Home";
+import Register from "../screens/Register";
 
 const AppRoutes  = [
     {
@@ -9,6 +10,10 @@ const AppRoutes  = [
     {
         path: '/login',
         element: <Login />
+    },
+    {
+        path: '/register',
+        element: <Register />
     },
 ]
 export default AppRoutes;

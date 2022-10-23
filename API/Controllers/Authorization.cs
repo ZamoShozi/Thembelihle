@@ -125,6 +125,6 @@ public class Authorization : Controller
         var id = HttpContext.Session.GetInt32("id");
         if (id == null) return Ok(new Response { success = false, message = "Account is not logged in" });
         HttpContext.Session.Remove("id");
-        return Ok(new Response { success = false, message = "Account logged out successful" });
+        return Ok(new Response { success = true, message = "Account logged out successful" });
     }
 }

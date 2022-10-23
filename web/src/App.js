@@ -1,15 +1,12 @@
 import './App.css';
-import React, { Component } from "react";
+import React from "react";
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
-
-import {Layout} from "./components/Layout";
-import Login from "./screens/Login";
-import Home from "./screens/Home";
+import Body from "./components/Body";
 import AppRoutes from "./components/Routes";
 
 function App(){
     return (
-        <Layout>
+        <Body>
             <Router>
                 <Routes>
                     {AppRoutes.map((route, index)=>{
@@ -18,7 +15,7 @@ function App(){
                     })}
                 </Routes>
             </Router>
-        </Layout>
+        </Body>
     );
 }
 
