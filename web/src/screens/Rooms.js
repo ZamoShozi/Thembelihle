@@ -14,7 +14,7 @@ function Rooms() {
                 let data = r.data.map((room, index)=>{
                     return (
                         <div key={index} className = "check-room">
-                            <img   alt = "room"/>
+                            <img src={room.image}  alt = "room"/>
                             <h3>{room.type}</h3>
                             <p>{room.description}</p>
                             <span>{`Beds: ${room.number_of_beds},  Available: ${room.quantity}`}</span>

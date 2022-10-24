@@ -30,7 +30,7 @@ public class Authorization : Controller
             return Ok(new Response {success = false, message = "user is blocked"});
         }
         HttpContext.Session.SetInt32("id", user.id);
-        return Ok(new Response {success = true, message = "login successful"});
+        return Ok(new Response {success = true, message = "login successful", data = new {u = user.roleNavigation.id}});
     }
     
     [HttpPost("register")]
@@ -111,7 +111,7 @@ public class Authorization : Controller
             {
                 db.Remove(user);
                 db.SaveChanges();
-                return Ok(new Response { success = false, message = "Something went wrong while saving data" });
+                return Ok(new Response { success = false, message = "Something went wrong while saving data"});
             }
         }
         catch (Exception)
@@ -121,7 +121,7 @@ public class Authorization : Controller
             return Ok(new Response { success = false, message = "Something went wrong while saving data" });
         }
         HttpContext.Session.SetInt32("id", id);
-        return Ok(new Response { success = true, message = "Account created successful" });
+        return Ok(new Response { success = true, message = "Account created successful", data = new {u=1}});
     }
     [HttpGet("logout")]
     public object Logout()
@@ -130,5 +130,67 @@ public class Authorization : Controller
         if (id == null) return Ok(new Response { success = false, message = "Account is not logged in" });
         HttpContext.Session.Remove("id");
         return Ok(new Response { success = true, message = "Account logged out successful" });
+    }
+
+    [HttpPost("request-reset-password")]
+    public object RequestResetPassword([FromBody]string email)
+    {
+        var db = new MyDbContext();
+        var users = db.users.Where(user => user.email == email);
+        const string message = "If email is present on the database you will receive an email with the code with the code";
+        if (!users.Any()) return Ok(new Response 
+            {   success = true, 
+                message = message
+            });
+        var number = Utils.GenerateNumber();
+        var sent = Utils.SendEmail(email, "Code: " + number, "Password Reset");
+        if (!sent) return Ok(new Response
+            {
+                success = true,
+                message = message
+            });
+        HttpContext.Session.SetInt32("reset-code", number);
+        HttpContext.Session.SetString("email", email);
+        return Ok(new Response
+        {
+            success = true,
+            message = message
+        });
+    }
+    [HttpPost("reset-password")]
+    public object ResetPassword([FromBody]ResetPassword password)
+    {
+        if (password.Password != password.PasswordC)return Ok(new Response { success = false, message = "Passwords does not match"});
+        const string passwordRegex = @"^(?=.*[A-Z])(?=.*\d)(?!.*(.)\1\1)[a-zA-Z0-9@]{6,12}$";
+        const RegexOptions option = RegexOptions.Singleline;
+        if (!Regex.Matches(password.Password, passwordRegex, option).Any())
+        {
+            return Ok(new Response {success = false, message = "At least one capital letter, one character, one digit and must be length of 6 to 12 characters. Special Characters and space not allowed"});
+        }
+        int? code;
+        if ((code = HttpContext.Session.GetInt32("reset-code")) == null)
+        {
+            return Ok(new Response { success = false, message = "Invalid reset code"});
+        }
+        if (code != password.Code)return Ok(new Response { success = false, message = "Invalid reset code"});
+        var db = new MyDbContext();
+        var email = HttpContext.Session.GetString("email");
+        var users = db.users.Where(user => user.email == email);
+        if (!users.Any())return Ok(new Response { success = false, message = "Unable to reset password"});
+        var user = users.First();
+        Utils.CreatePasswordHash(password.Password, out var passwordHash, out var passwordSalt);
+        user.password_hash = passwordHash;
+        user.password_salt = passwordSalt;
+        db.Update(user);
+        try
+        {
+            var results = db.SaveChanges();
+            if (results == -1)return Ok(new Response { success = false, message = "Something went wrong while saving data" });
+        }catch (Exception)
+        {
+            return Ok(new Response { success = false, message = "Something went wrong while saving data" });
+        }
+        HttpContext.Session.SetInt32("id", user.id);
+        return Ok(new Response { success = true, message = "Password changed successful", data = new {u=1}});
     }
 }

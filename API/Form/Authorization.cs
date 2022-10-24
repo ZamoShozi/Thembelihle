@@ -10,6 +10,19 @@ public class Login
     public string Email { get;}
     public string Password { get;}
 }
+
+public class ResetPassword
+{
+    public ResetPassword(int code, string password, string passwordC)
+    {
+        Code = code;
+        Password = password;
+        PasswordC = passwordC;
+    }
+    public int Code { get; }
+    public string Password { get; }
+    public string PasswordC { get; }
+}
 public class Register
 {
     public Register(string name, string surname, string phoneNumber, string email, string password, string passwordC, Address address)
