@@ -20,3 +20,11 @@ export const register = async (name, surname, phone, email, password, passwordC,
         }
     }).then(r => r.data)
 }
+export const checkLogin = () =>{
+    if(sessionStorage.getItem("expiry") !== null){
+        if(new Date(Number.parseInt(sessionStorage.getItem("expiry")))  > new Date()){
+            return true
+        }
+    }
+    return false
+}

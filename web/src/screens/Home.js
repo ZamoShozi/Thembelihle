@@ -11,7 +11,6 @@ function Home() {
                         window.location = "/rooms"
                     }}>BOOK NOW</button>
                 </div>
-                
             </header>
         </div>
     );

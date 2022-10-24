@@ -4,7 +4,7 @@
   --dark: #292826;
 }
 body{
-  background-image: url("./images/banner-img.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2)),url("./images/banner-img.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -130,4 +130,120 @@ body{
     font-size: 17px;
     margin: 20px auto;
   }
+}
+
+/* Room */
+.check-rooms-div{
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  z-index: 10;
+}
+#room-loading-bar{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 10;
+}
+.check-rooms-background{
+  background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url("./images/banner-img.jpg"), center, no-repeat;
+  color: #fff;
+  height: 100%;
+  width: 100vw;
+  justify-content: center;
+  position: fixed;
+  z-index: 0;
+}
+
+.check-rooms{
+  margin-top: 40px;
+  padding: 40px 0;
+}
+.room-price{
+  color: var(--yellow);
+  font-size: 40px;
+  font-weight: 900;
+}
+.check-room{
+  background: #fff;
+  padding: 35px;
+  text-align: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.75);
+  transition: var(--transition);
+  z-index: 10;
+  position: relative;
+  border-radius: 16px;
+  margin: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.rating{
+  margin: 10px 0;
+  color: var(--yellow);
+}
+.check-room h3{
+  font-size: 25px;
+}
+.check-room p{
+  opacity: 0.7;
+  line-height: 1.8;
+  width: 60%;
+  margin: 0 auto;
+}
+.check-room img{
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  margin: 25px auto;
+}
+.check-room span{
+  font-weight: 700;
+  opacity: 0.7;
+}
+.check-room:hover{
+  transform: translateY(-18px);
+}
+@media(min-width: 992px){
+  .check-rooms-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 30px;
+    z-index: 0;
+  }
+}
+@media(min-width: 1370px){
+  .check-rooms-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media(max-width: 500px){
+  .check-room p{
+    width: 100%;
+  }
+  .check-room img{
+    width: 100px;
+    height: 100px;
+  }
+}
+.toast-container{
+  z-index: 20;
+}
+.make-booking{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-top: 280px;
+  padding-bottom: 280px;
+}
+.make-booking-form{
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
 }

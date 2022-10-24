@@ -25,7 +25,7 @@ public class Rooms : Controller
             type.guest,
             type.number_of_beds,
             type.price,
-            type.image
+            image = type.images.First(image => image.type == type.type)
         });
         return Ok(new Response {success = true, data = rooms});
     }
@@ -52,7 +52,7 @@ public class Rooms : Controller
             type.guest,
             type.number_of_beds,
             type.price,
-            type.image
+            mage = type.images.First(image => image.type == type.type)
         });
         return Ok(new Response {success = true, data = rooms});
     }

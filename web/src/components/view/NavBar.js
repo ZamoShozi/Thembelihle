@@ -1,6 +1,6 @@
 ﻿import React, {useState, useEffect, useRef} from 'react';
 import {Navbar, NavDropdown} from "react-bootstrap";
-import {logout} from "../api/Authorization";
+import {checkLogin, logout} from "../api/authorization";
 
 function NavBar() {
     const [home, setHome] = useState("nav-link")
@@ -8,11 +8,7 @@ function NavBar() {
     const [login, setLogin] = useState("nav-link")
     const [loggedIn, setLoggedIn] = useState(false)
     useEffect(()=>{
-        if(sessionStorage.getItem("expiry") !== null){
-            if(new Date(Number.parseInt(sessionStorage.getItem("expiry")))  > new Date()){
-                setLoggedIn(true)
-            }
-        }
+        setLoggedIn(checkLogin)
         switch (document.location.pathname){
             case "/":{
                 setHome("nav-link active")
@@ -42,6 +38,12 @@ function NavBar() {
                         </li>
                         <li className="nav-item">
                             <a className={room} href="./rooms">Rooms</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className={room} href="./rooms">About</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className={room} href="./rooms">Contact</a>
                         </li>
                         {!loggedIn ?
                             <li className="nav-item">

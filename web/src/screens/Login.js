@@ -1,8 +1,7 @@
 ﻿import React,{useState, useRef, useEffect} from 'react';
-import {login} from "../components/api/Authorization";
+import {login} from "../components/api/authorization";
 import {Spinner} from "react-bootstrap";
 import Body from "../components/Body";
-import Toast from "../components/view/Toast";
 
 function Login() {
     const [password, setPassword] = useState("")
@@ -34,14 +33,14 @@ function Login() {
                             setLoading(true)
                             login(email, password).then(data =>{
                                 if(data["success"]){
-                                    Body.prototype.showToast(data["message"], "Login Status", "success")
-                                    sessionStorage.setItem("expiry", `${new Date().setHours(0) + (60000*30)}`)
+                                    Body.prototype.showToast(data["message"], "Login Status", "success", 1500)
+                                    sessionStorage.setItem("expiry", `${new Date().getTime() + (60000*30)}`)
                                     setDisable(true)
                                     setTimeout(()=>{
                                         window.location = "/"
                                     }, 1500)
                                 }else{
-                                    Body.prototype.showToast(data["message"], "Login Status", "error")
+                                    Body.prototype.showToast(data["message"], "Login Status", "error", 5000)
                                 }
                                 setLoading(false)
                             })

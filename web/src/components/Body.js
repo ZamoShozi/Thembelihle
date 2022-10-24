@@ -4,11 +4,11 @@ import CustomToast from "./view/Toast";
 
 export default function Body(props) {
     const [toast, setToast] = useState({})
-    Body.prototype.showToast = function (message, type, about) {
-        setToast({message:message, type:type, about:about})
+    Body.prototype.showToast = function (message, type, about, time) {
+        setToast({message:message, type:type, about:about, time:time})
         setTimeout(()=>{
             setToast({})
-        }, 3500)
+        }, time)
     }
     return (
         <>

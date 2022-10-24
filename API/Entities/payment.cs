@@ -23,11 +23,8 @@ namespace API.Entities
         [StringLength(16)]
         [Unicode(false)]
         public string card_number { get; set; } = null!;
-        [StringLength(7)]
-        [Unicode(false)]
-        
         [Column(TypeName = "datetime")]
-        public DateTime? expiry_date { get; set; } = null!;
+        public DateTime expiry_date { get; set; }
         public int? customer_id { get; set; }
         public int? cvv { get; set; }
 

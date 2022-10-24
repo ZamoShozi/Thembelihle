@@ -1,5 +1,5 @@
 ﻿import api from "../API";
 
-export const AccountDetails = async () =>{
+export const accountDetails = async () =>{
     return await api.get("account").then(r => r.data)
 }

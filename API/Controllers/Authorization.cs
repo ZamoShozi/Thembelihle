@@ -40,6 +40,11 @@ public class Authorization : Controller
         {
             return Ok(new Response {success = false, message = "Password does not match"});
         }
+        string error;
+        if ((error = register.isValid()).Length > 0)
+        {
+            return Ok(new Response {success = false, message = error});
+        }
         var db = new MyDbContext();
         if (db.users.Any(user => user.phone_number!.Equals(register.PhoneNumber)))
         {
@@ -77,7 +82,6 @@ public class Authorization : Controller
         user.surname = register.Surname;
         user.blocked = 0;
         user.role = 1;
-        user.image = 5;
         user.email = register.Email;
         user.phone_number = register.PhoneNumber;
         address.country = register.Address.Country;

@@ -37,11 +37,7 @@ namespace API.Entities
         [MaxLength(512)]
         public byte[] password_salt { get; set; } = null!;
         public int role { get; set; }
-        public int image { get; set; }
 
-        [ForeignKey(nameof(image))]
-        [InverseProperty(nameof(Image.users))]
-        public virtual Image imageNavigation { get; set; } = null!;
         [ForeignKey(nameof(role))]
         [InverseProperty("users")]
         public virtual role roleNavigation { get; set; } = null!;

@@ -17,6 +17,8 @@ namespace API.Entities
         [Unicode(false)]
         public string message { get; set; } = null!;
         public int read { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime date { get; set; }
 
         [ForeignKey(nameof(booking))]
         [InverseProperty("booking_message")]

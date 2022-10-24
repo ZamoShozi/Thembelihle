@@ -8,9 +8,15 @@ namespace API.Context
 {
     public partial class MyDbContext : DbContext
     {
-        public MyDbContext() { }
-        public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
-        public virtual DbSet<Image> Images { get; set; } = null!;
+        public MyDbContext()
+        {
+        }
+
+        public MyDbContext(DbContextOptions<MyDbContext> options)
+            : base(options)
+        {
+        }
+
         public virtual DbSet<address> addresses { get; set; } = null!;
         public virtual DbSet<booked_extra> booked_extras { get; set; } = null!;
         public virtual DbSet<booked_room> booked_rooms { get; set; } = null!;
@@ -19,6 +25,7 @@ namespace API.Context
         public virtual DbSet<extra> extras { get; set; } = null!;
         public virtual DbSet<extra_type> extra_types { get; set; } = null!;
         public virtual DbSet<feedback> feedbacks { get; set; } = null!;
+        public virtual DbSet<image> images { get; set; } = null!;
         public virtual DbSet<payment> payments { get; set; } = null!;
         public virtual DbSet<promotion> promotions { get; set; } = null!;
         public virtual DbSet<role> roles { get; set; } = null!;
@@ -30,6 +37,7 @@ namespace API.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=146.230.177.46;Initial Catalog=GroupPmb7;Persist Security Info=True;User ID=GroupPmb7;Password=8yrrvz");
             }
         }
@@ -104,6 +112,8 @@ namespace API.Context
 
             modelBuilder.Entity<booking_message>(entity =>
             {
+                entity.Property(e => e.date).HasDefaultValueSql("(getdate())");
+
                 entity.HasOne(d => d.bookingNavigation)
                     .WithOne(p => p.booking_message)
                     .HasForeignKey<booking_message>(d => d.booking)
@@ -118,6 +128,16 @@ namespace API.Context
                     .HasForeignKey<feedback>(d => d.booking)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("feedback_booking_fk");
+            });
+
+            modelBuilder.Entity<image>(entity =>
+            {
+                entity.HasOne(d => d.typeNavigation)
+                    .WithMany(p => p.images)
+                    .HasPrincipalKey(p => p.type)
+                    .HasForeignKey(d => d.type)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("image_room_type_null_fk");
             });
 
             modelBuilder.Entity<payment>(entity =>
@@ -137,22 +157,8 @@ namespace API.Context
                     .HasConstraintName("room_room_type_id_fk");
             });
 
-            modelBuilder.Entity<room_type>(entity =>
-            {
-                entity.HasOne(d => d.imageNavigation)
-                    .WithMany(p => p.room_types)
-                    .HasForeignKey(d => d.image)
-                    .HasConstraintName("room_type_image_fk");
-            });
-
             modelBuilder.Entity<user>(entity =>
             {
-                entity.HasOne(d => d.imageNavigation)
-                    .WithMany(p => p.users)
-                    .HasForeignKey(d => d.image)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("user_image_fk");
-
                 entity.HasOne(d => d.roleNavigation)
                     .WithMany(p => p.users)
                     .HasForeignKey(d => d.role)

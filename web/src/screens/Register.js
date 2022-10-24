@@ -1,5 +1,7 @@
 ﻿import React,{useState, useRef, useEffect} from 'react';
-import {register} from "../components/api/Authorization";
+import {register} from "../components/api/authorization";
+import Body from "../components/Body";
+import {Spinner} from "react-bootstrap";
 
 function Register() {
     const [password, setPassword] = useState("")
@@ -13,6 +15,8 @@ function Register() {
     const [city, setCity] = useState("")
     const [zip, setZip] = useState("")
     const [valid, setValid] = useState(false)
+    const [disable, setDisable] = useState(false)
+    const [loading, setLoading] = useState(false)
     useEffect(()=>{
         if(passwordC === passwordC){
             setValid(true)
@@ -33,7 +37,7 @@ function Register() {
                         <label htmlFor="floatingInputName">Enter Name</label>
                     </div>
                     <div className="form-floating">
-                        <input type="password" value={surname} className="form-control" id="floatingInputSurname" placeholder="Shozi" onChange={
+                        <input type="text" value={surname} className="form-control" id="floatingInputSurname" placeholder="Shozi" onChange={
                             (text)=>{
                                 setSurname(text.target.value)
                             }
@@ -110,20 +114,26 @@ function Register() {
                     }/>
                     <label htmlFor="floatingPassword">Confirm Password</label>
                 </div>
-                <button className={"btn btn-outline-success"} onClick={()=>{
-                    setPhone("+27"+phone)
+                 {loading ? <Spinner className={"text-success"} animation={"border"}/> : <button disabled={disable} className={"btn btn-outline-success"} onClick={()=>{
                     if(valid){
-                        register(name, surname, phone, email, password, passwordC, country, state, city, zip).then(data =>{
+                        setLoading(true)
+                        register(name, surname, "+27"+phone, email, password, passwordC, country, state, city, zip).then(data =>{
                             if(data["success"]){
-                                alert("Register successful")
+                                Body.prototype.showToast(data["message"], "Login Status", "success", 1500)
+                                sessionStorage.setItem("expiry", `${new Date().getTime() + (60000*30)}`)
+                                setDisable(true)
+                                setTimeout(()=>{
+                                    window.location = "/"
+                                }, 1500)
                             }else{
-                                alert(data["message"])
+                                Body.prototype.showToast(data["message"], "Login Status", "error", 10000)
                             }
+                            setLoading(false)
                         })
                     }else{
                         alert("please complete a valid form")
                     }
-                }}>Register</button>
+                }}>Register</button>}
                 <a href="/login" className="card-link">Login</a>
             </div>
         </div>
